@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill in the Blanks Quiz</title>
+    <style>
+        /* Base styles and centering */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Container styling */
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        /* Question and input structure */
+        .question-block {
+            font-size: 1.15rem;
+            line-height: 2;
+            color: #334155;
+            margin-bottom: 30px;
+        }
+
+        .blank-input {
+            display: inline-block;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f172a;
+            text-align: center;
+            border: none;
+            border-bottom: 2px solid #94a3b8;
+            background-color: #f8fafc;
+            padding: 2px 10px;
+            margin: 0 5px;
+            width: 140px;
+            outline: none;
+            transition: all 0.2s ease;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .blank-input:focus {
+            background-color: #f1f5f9;
+            border-bottom-color: #3b82f6;
+        }
+
+        /* Status classes applied by JS */
+        .blank-input.correct-input {
+            background-color: #d1e7dd;
+            border-bottom-color: #198754;
+            color: #0f5132;
+        }
+
+        .blank-input.incorrect-input {
+            background-color: #f8d7da;
+            border-bottom-color: #dc3545;
+            color: #842029;
+        }
+
+        /* Action button */
+        .btn-submit {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-submit:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* Feedback box styling */
+        .feedback {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .feedback.correct {
+            display: block;
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+
+        .feedback.incorrect {
+            display: block;
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <form id="quizForm">
+        <h2>Fill in the Blanks</h2>
+        
+        <div class="question-block">
+            JavaScript is a programming language commonly used to create 
+            <input type="text" id="blank1" class="blank-input" placeholder="answer 1" autocomplete="off" required> 
+            content on websites, while HTML provides the page 
+            <input type="text" id="blank2" class="blank-input" placeholder="answer 2" autocomplete="off" required>.
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Check Answers</button>
+    </form>
+
+    <div id="feedback" class="feedback"></div>
+</div>
+
+<script>
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+        // Prevent the form from submitting and reloading the page
+        e.preventDefault();
+
+        // Define acceptable correct answers (lowercased for case-insensitive validation)
+        const answers = {
+            blank1: ['interactive', 'dynamic'],
+            blank2: ['structure', 'layout', 'skeleton']
+        };
+
+        // Grab elements
+        const input1 = document.getElementById('blank1');
+        const input2 = document.getElementById('blank2');
+        const feedbackDiv = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Extract value, trim spaces, and make lowercase
+        const userAns1 = input1.value.trim().toLowerCase();
+        const userAns2 = input2.value.trim().toLowerCase();
+
+        // Validate first blank
+        let isCorrect1 = answers.blank1.includes(userAns1);
+        if (isCorrect1) {
+            input1.className = "blank-input correct-input";
+        } else {
+            input1.className = "blank-input incorrect-input";
+        }
+
+        // Validate second blank
+        let isCorrect2 = answers.blank2.includes(userAns2);
+        if (isCorrect2) {
+            input2.className = "blank-input correct-input";
+        } else {
+            input2.className = "blank-input incorrect-input";
+        }
+
+        // Display consolidated feedback message
+        if (isCorrect1 && isCorrect2) {
+            feedbackDiv.className = "feedback correct";
+            feedbackDiv.textContent = "Excellent! Both answers are correct.";
+        } else {
+            feedbackDiv.className = "feedback incorrect";
+            
+            // Helpful text showing what parts need correcting
+            let errorText = "Some answers are incorrect. ";
+            if (!isCorrect1) errorText += "Check Blank 1. ";
+            if (!isCorrect2) errorText += "Check Blank 2. ";
+            feedbackDiv.textContent = errorText;
+        }
+
+        // Lock inputs and button after checking to prevent editing
+        input1.disabled = true;
+        input2.disabled = true;
+        submitBtn.disabled = true;
+    });
+</script>
+
+</body>
+</html>
