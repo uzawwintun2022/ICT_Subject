@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz with Navigation & Shuffling</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .quiz-container { padding: 20px 15px; }
+            h1 { font-size: 1.5rem; }
+            .btn-group { flex-direction: column; gap: 10px; }
+            .btn { width: 100% !important; }
+            .nav-group { flex-direction: column; gap: 10px; }
+            .nav-link { width: 100%; text-align: center; }
+        }
+        h1 {
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .question-block:last-of-type {
+            border-bottom: none;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .option-label input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+        /* Results Styles */
+        .option-label.correct-selected {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #14532d;
+        }
+        .option-label.incorrect-selected {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+        .option-label.correct-unselected {
+            background-color: #f0fdf4;
+            border-color: #4ade80;
+            color: #166534;
+        }
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s ease;
+        }
+        .submit-btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            width: 65%;
+        }
+        .submit-btn:hover {
+            background-color: #1d4ed8;
+        }
+        .reset-btn {
+            background-color: #64748b;
+            color: #ffffff;
+            width: 35%;
+        }
+        .reset-btn:hover {
+            background-color: #475569;
+        }
+        .result-dashboard {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #eff6ff;
+            border-left: 5px solid #2563eb;
+            border-radius: 4px 8px 8px 4px;
+            text-align: center;
+        }
+        .score-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        /* Navigation Links Style */
+        .nav-group {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px dashed #cbd5e1;
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+        }
+        .nav-link {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .nav-back {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .nav-back:hover {
+            background-color: #e2e8f0;
+        }
+        .nav-quiz {
+            background-color: #0ea5e9;
+            color: #ffffff;
+        }
+        .nav-quiz:hover {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Interactive Knowledge Quiz</h1>
+    <form id="quizForm">
+        <div id="questionsContainer">
+            <!-- Q1 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">1</span>. External threats are including hacking, denial of service and malware.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q1" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q1" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">2</span>. There are 4 types of software vulnerability.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q2" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q2" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">3</span>. Password guessing is the act of repeatedly trying different passwords.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q3" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q3" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">4</span>. A worm isn't a self-replicating virus.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q4" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q4" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">5</span>. Information system Hardware refers to the physical components such as server, storage devices, and networking equipment.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q5" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q5" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">6</span>. Software is a set of instruction that tells the hardware what to do and how to do it.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q6" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q6" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">7</span>. An application server is like a computer inside a computer- it acts like a real server, but it's just software.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q7" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q7" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">8</span>. There are five types of video formats, extension and their characteristics.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q8" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q8" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">9</span>. Text and number data is entered here using the keyboard is called Text Box.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q9" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q9" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">10</span>. There are ten components of Graphical User Interface (GUI).</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q10" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q10" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q11 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">11</span>. You can also use network without internet.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q11" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q11" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q12 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">12</span>. A Global IP address directly connects to internet.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q12" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q12" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q13 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">13</span>. A domain name uses a combination of number to represent an IP address.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q13" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q13" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q14 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">14</span>. In 2010, the global mobile subscription is equivalent to 77 percent of the world people.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q14" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q14" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q15 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">15</span>. In 2010, the global mobile subscription is equivalent to 70 percent of the world people.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q15" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q15" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q16 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">16</span>. The mobile penetration is growing rapidly, particularly in urban areas.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q16" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q16" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q17 -->
+            <div class="question-block" data-correct="False">
+                <div class="question-text"><span class="q-num">17</span>. The mobile penetration is growing rapidly, particularly in rural areas.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q17" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q17" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q18 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">18</span>. Artificial Intelligence (AI) Tools for Personal Growth merge advanced technologies.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q18" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q18" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q19 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">19</span>. In Artificial Intelligence (AI), the advanced technologies are such as machine learning, natural language processing, and data analytics.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q19" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q19" value="False"> False</label>
+                </div>
+            </div>
+
+            <!-- Q20 -->
+            <div class="question-block" data-correct="True">
+                <div class="question-text"><span class="q-num">20</span>. In Artificial Intelligence (AI), the data analytics perform with self-improvement strategies to provide user with personalized insights and actionable feedback.</div>
+                <div class="options-container">
+                    <label class="option-label"><input type="radio" name="q20" value="True"> True</label>
+                    <label class="option-label"><input type="radio" name="q20" value="False"> False</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn submit-btn" id="submitBtn">Submit Answers</button>
+            <button type="button" class="btn reset-btn" id="resetBtn">Reset Quiz</button>
+        </div>
+    </form>
+
+    <div class="result-dashboard" id="resultDashboard">
+        <div class="score-text" id="scoreText"></div>
+    </div>
+
+    <!-- Navigation Group Added Below -->
+    <div class="nav-group">
+        <a href="index.html" class="nav-link nav-back">Back</a>
+        <a href="fill.html" class="nav-link nav-quiz">Fill in the blank</a>
+        <a href="multiple.html" class="nav-link nav-quiz">Multiple Choice</a>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('quizForm');
+    const container = document.getElementById('questionsContainer');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const dashboard = document.getElementById('resultDashboard');
+    const scoreText = document.getElementById('scoreText');
+
+    // Function to shuffle array
+    function shuffleQuestions() {
+        const blocks = Array.from(container.querySelectorAll('.question-block'));
+        
+        // Fisher-Yates Shuffle Algorithm
+        for (let i = blocks.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            container.appendChild(blocks[j]);
+        }
+
+        // Re-number the questions sequentially after shuffle
+        const updatedBlocks = container.querySelectorAll('.question-block');
+        updatedBlocks.forEach((block, index) => {
+            block.querySelector('.q-num').textContent = index + 1;
+        });
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const blocks = document.querySelectorAll('.question-block');
+        let score = 0;
+        let total = blocks.length;
+
+        blocks.forEach(block => {
+            const correctAnswer = block.getAttribute('data-correct');
+            const selectedInput = block.querySelector('input[type="radio"]:checked');
+            const options = block.querySelectorAll('.option-label');
+
+            options.forEach(label => {
+                label.classList.remove('correct-selected', 'incorrect-selected', 'correct-unselected');
+                label.querySelector('input').disabled = true;
+            });
+
+            if (selectedInput) {
+                const selectedValue = selectedInput.value;
+                if (selectedValue === correctAnswer) {
+                    score++;
+                    selectedInput.parentElement.classList.add('correct-selected');
+                } else {
+                    selectedInput.parentElement.classList.add('incorrect-selected');
+                    options.forEach(label => {
+                        if (label.querySelector('input').value === correctAnswer) {
+                            label.classList.add('correct-unselected');
+                        }
+                    });
+                }
+            } else {
+                options.forEach(label => {
+                    if (label.querySelector('input').value === correctAnswer) {
+                        label.classList.add('correct-unselected');
+                    }
+                });
+            }
+        });
+
+        scoreText.textContent = `Your Score: ${score} / ${total} (${Math.round((score/total)*100)}%)`;
+        dashboard.style.display = 'block';
+        dashboard.scrollIntoView({ behavior: 'smooth' });
+        
+        submitBtn.disabled = true;
+        submitBtn.style.backgroundColor = '#94a3b8';
+    });
+
+    resetBtn.addEventListener('click', function() {
+        form.reset();
+        
+        const blocks = document.querySelectorAll('.question-block');
+        blocks.forEach(block => {
+            const options = block.querySelectorAll('.option-label');
+            options.forEach(label => {
+                label.classList.remove('correct-selected', 'incorrect-selected', 'correct-unselected');
+                const input = label.querySelector('input');
+                input.disabled = false;
+            });
+        });
+
+        // Shuffle and randomize numbers on reset click
+        shuffleQuestions();
+
+        dashboard.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.style.backgroundColor = '#2563eb';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>
