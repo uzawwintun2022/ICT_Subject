@@ -287,7 +287,7 @@
             { id: 13, text: "<input type='text' class='underline-input' readonly id='ans-13'> file type is the data can be compressed to about 1/20 the size of a music CD.", options: { a: "MP3", b: "WAV", c: "WMA", d: "MIDI" }, correct: "c" },
             { id: 14, text: "How many Features of Computer network?<br><input type='text' class='underline-input' readonly id='ans-14'>", options: { a: "5", b: "6", c: "7", d: "8" }, correct: "c" },
             { id: 15, text: "How many types of cables are used in Networking?<br><input type='text' class='underline-input' readonly id='ans-15'>", options: { a: "3", b: "4", c: "5", d: "8" }, correct: "a" },
-            { id: 16, text: "Peer-To-Peer network is useful for small environments, usually up to <input type='text' class='underline-input' readonly id='ans-16'> computers.", options: { a: "7", b: "8", c: "9", d: "10" }, correct: "a" },
+            { id: 16, text: "Peer-To-Peer network is useful for small environments, usually up to <input type='text' class='underline-input' readonly id='ans-16'> computers.", options: { a: "7", b: "8", c: "9", d: "10" }, correct: "d" },
             { id: 17, text: "<input type='text' class='underline-input' readonly id='ans-17'> Area Network is a network arranged within an individual person, typically within a range of 10 meters.", options: { a: "Local", b: "Personal", c: "Metropolitan", d: "Wide" }, correct: "b" },
             { id: 18, text: "OSI (Open Systems Interconnection) model have <input type='text' class='underline-input' readonly id='ans-18'> Layers.", options: { a: "4", b: "5", c: "6", d: "7" }, correct: "d" },
             { id: 19, text: "The m-Government is the strategic delivery of public <input type='text' class='underline-input' readonly id='ans-19'>, information and interactions through wireless and mobile communication technologies.", options: { a: "service", b: "services", c: "servant", d: "servants" }, correct: "b" },
@@ -313,7 +313,6 @@
                 card.className = 'quiz-card';
                 card.id = `card-${q.id}`;
 
-                // Set dynamic question text replacing static text with input
                 let questionHTML = `<div class="question">${index + 1}. ${q.text}</div>`;
                 
                 let optionsHTML = '<div class="options-grid">';
@@ -382,13 +381,21 @@
             return array;
         }
 
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
         function resetQuiz() {
-            // Clone original list and shuffle
             currentQuestions = shuffle([...originalQuestions]);
             renderQuiz(currentQuestions);
         }
 
-        // Initial Load
         currentQuestions = [...originalQuestions];
         renderQuiz(currentQuestions);
     </script>
