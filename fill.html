@@ -13,6 +13,7 @@
             --success-color: #2ecc71;
             --error-color: #e74c3c;
             --border-color: #bdc3c7;
+            --nav-bg: #34495e;
         }
 
         * {
@@ -36,6 +37,7 @@
             padding: 30px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -116,15 +118,11 @@
         }
 
         .actions-bar {
-            position: sticky;
-            bottom: 0;
-            background: var(--card-bg);
             padding: 15px 0;
             border-top: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             gap: 15px;
-            z-index: 100;
         }
 
         button {
@@ -148,20 +146,60 @@
         }
 
         .btn-reset {
-            background-color: #95a5a6;
+            background-color: #e67e22;
             color: white;
         }
 
         .btn-reset:hover {
-            background-color: #7f8c8d;
+            background-color: #d35400;
         }
 
         .score-display {
             text-align: center;
             font-size: 18px;
             font-weight: bold;
-            margin-top: 15px;
+            margin-bottom: 15px;
             display: none;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        /* Bottom Navigation Menu Styles */
+        .bottom-nav {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--nav-bg);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+            font-size: 15px;
+            transition: background 0.3s ease;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-link.back-btn {
+            background: #e74c3c;
+        }
+        .nav-link.back-btn:hover {
+            background: #c0392b;
         }
 
         /* Responsive adjustments */
@@ -186,6 +224,13 @@
                 padding: 10px 15px;
                 font-size: 14px;
             }
+            .bottom-nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .nav-link {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -195,18 +240,26 @@
     <h1>Fill in the Blanks Quiz</h1>
     <p class="subtitle">Test your knowledge. Fill in the underlined inputs and click "Check Answers".</p>
 
-    <div id="quiz-form"></div>
-
     <div class="score-display" id="score-container"></div>
+
+    <div id="quiz-form"></div>
 
     <div class="actions-bar">
         <button type="button" class="btn-check" onclick="checkAnswers()">Check Answers</button>
-        <button type="button" class="btn-reset" onclick="resetQuiz()">Reset / Reanswer</button>
+        <button type="button" class="btn-reset" onclick="resetAndShuffleQuiz()">Reset & Randomize Order</button>
     </div>
 </div>
 
+<!-- Bottom Navigation Links Area -->
+<div class="bottom-nav">
+    <a href="index.html" class="nav-link back-btn">Back</a>
+    <a href="true.html" class="nav-link">True / False</a>
+    <a href="multiple.html" class="nav-link">Multiple Choice</a>
+</div>
+
 <script>
-    const quizData = [
+    // Original list of questions
+    const originalQuizData = [
         { num: 1, left: "Information assets are a valuable resource that needs ", right: ".", answer: "protection" },
         { num: 2, left: "", right: " threats are attacks that are conducted by employees or contractors within organizations.", answer: "Internet" },
         { num: 3, left: "", right: " code refers to programs that cause damage to a system when executed.", answer: "Malicious" },
@@ -237,17 +290,28 @@
         { num: 28, left: "We use Artificial Intelligence (AI) to analyze personal data such as ", right: " records, behavioral patterns, and emotional makers to offer individualized insights.", answer: "journaling" }
     ];
 
+    // Working array that will be shuffled
+    let currentQuizData = [...originalQuizData];
+
+    // Shuffle function (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
     function loadQuiz() {
         const container = document.getElementById('quiz-form');
         container.innerHTML = '';
         
-        quizData.forEach((q, index) => {
+        currentQuizData.forEach((q, index) => {
             const item = document.createElement('div');
             item.className = 'quiz-item';
             
-            // Build text with inline input box
+            // Build text with inline input box (displays the original original question number q.num)
             item.innerHTML = `
-                <span class="q-num">${q.num}.</span>
+                <span class="q-num">${index + 1}.</span>
                 ${q.left}
                 <input type="text" class="blank-input" id="q-${index}" autocomplete="off" placeholder="type answer...">
                 ${q.right}
@@ -260,7 +324,7 @@
     function checkAnswers() {
         let correctCount = 0;
         
-        quizData.forEach((q, index) => {
+        currentQuizData.forEach((q, index) => {
             const inputEl = document.getElementById(`q-${index}`);
             const feedbackEl = document.getElementById(`feedback-${index}`);
             const userAns = inputEl.value.trim().toLowerCase();
@@ -279,20 +343,20 @@
         });
 
         const scoreContainer = document.getElementById('score-container');
-        scoreContainer.innerHTML = `Your Score: ${correctCount} / ${quizData.length}`;
+        scoreContainer.innerHTML = `Your Score: ${correctCount} / ${currentQuizData.length}`;
         scoreContainer.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function resetQuiz() {
-        quizData.forEach((q, index) => {
-            const inputEl = document.getElementById(`q-${index}`);
-            const feedbackEl = document.getElementById(`feedback-${index}`);
-            inputEl.value = '';
-            inputEl.className = "blank-input";
-            feedbackEl.innerHTML = '';
-            feedbackEl.className = 'feedback';
-        });
+    function resetAndShuffleQuiz() {
+        // Clear inputs and score display
         document.getElementById('score-container').style.display = 'none';
+        
+        // Randomize the quiz items sequence
+        shuffleArray(currentQuizData);
+        
+        // Re-render the randomized content
+        loadQuiz();
     }
 
     // Initialize quiz on load
