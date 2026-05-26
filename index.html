@@ -1,210 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fill in the Blanks Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz Navigation Buttons</title>
     <style>
-        /* Base styles and centering */
+        :root {
+            /* Button Colors */
+            --color-true-false: #ef4444;      /* Red */
+            --color-fill-blank: #f59e0b;      /* Amber/Orange */
+            --color-multiple: #10b981;        /* Emerald/Green */
+            
+            --bg-base: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            background-color: var(--bg-base);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            padding: 16px;
         }
 
-        /* Container styling */
-        .quiz-container {
-            background-color: #ffffff;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            max-width: 600px;
+        /* Phone Viewport Container */
+        .phone-container {
             width: 100%;
+            max-width: 412px;
+            height: 732px;
+            background: var(--bg-card);
+            border-radius: 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border: 8px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
-        h2 {
-            color: #1e293b;
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 10px;
+        /* Top Status Bar */
+        .status-bar {
+            height: 24px;
+            background: #1e293b;
+            color: #ffffff;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-weight: 500;
         }
 
-        /* Question and input structure */
-        .question-block {
-            font-size: 1.15rem;
-            line-height: 2;
-            color: #334155;
-            margin-bottom: 30px;
+        .screen-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            overflow-y: auto;
         }
 
-        .blank-input {
-            display: inline-block;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #0f172a;
+        header {
+            margin-bottom: 28px;
             text-align: center;
-            border: none;
-            border-bottom: 2px solid #94a3b8;
-            background-color: #f8fafc;
-            padding: 2px 10px;
-            margin: 0 5px;
-            width: 140px;
-            outline: none;
-            transition: all 0.2s ease;
-            border-radius: 4px 4px 0 0;
         }
 
-        .blank-input:focus {
-            background-color: #f1f5f9;
-            border-bottom-color: #3b82f6;
+        header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
         }
 
-        /* Status classes applied by JS */
-        .blank-input.correct-input {
-            background-color: #d1e7dd;
-            border-bottom-color: #198754;
-            color: #0f5132;
+        header p {
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
-        .blank-input.incorrect-input {
-            background-color: #f8d7da;
-            border-bottom-color: #dc3545;
-            color: #842029;
+        /* Vertical Button Navigation Layout (အပေါ်အောက် တန်းစီစနစ်) */
+        .buttons-nav {
+            display: flex;
+            flex-direction: column; /* အပေါ်အောက် ထားရန် */
+            gap: 14px;              /* ခလုတ်တစ်ခုစီကြား အကွာအဝေး */
+            margin-bottom: 28px;
         }
 
-        /* Action button */
-        .btn-submit {
+        /* Base Button Style */
+        .nav-btn {
+            display: block;
             width: 100%;
-            background-color: #2563eb;
+            padding: 16px 20px;
+            font-size: 15px;
+            font-weight: 600;
             color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .btn-submit:hover {
-            background-color: #1d4ed8;
-        }
-
-        .btn-submit:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        /* Feedback box styling */
-        .feedback {
-            margin-top: 25px;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 600;
+            text-decoration: none;
             text-align: center;
-            display: none;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .feedback.correct {
-            display: block;
-            background-color: #d1e7dd;
-            color: #0f5132;
-            border: 1px solid #badbcc;
+        .nav-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        .feedback.incorrect {
-            display: block;
-            background-color: #f8d7da;
-            color: #842029;
-            border: 1px solid #f5c2c7;
+        /* ခလုတ်များအား ကာလာ သီးသန့်စီ ခွဲပေးထားခြင်း */
+        .btn-true {
+            background-color: var(--color-true-false);
+        }
+        .btn-true:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-fill {
+            background-color: var(--color-fill-blank);
+        }
+        .btn-fill:hover {
+            background-color: #d97706;
+        }
+
+        .btn-multiple {
+            background-color: var(--color-multiple);
+        }
+        .btn-multiple:hover {
+            background-color: #059669;
+        }
+
+        /* Preview Display Area */
+        .preview-card {
+            flex: 1;
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .preview-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .preview-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .preview-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <form id="quizForm">
-        <h2>Fill in the Blanks</h2>
-        
-        <div class="question-block">
-            JavaScript is a programming language commonly used to create 
-            <input type="text" id="blank1" class="blank-input" placeholder="answer 1" autocomplete="off" required> 
-            content on websites, while HTML provides the page 
-            <input type="text" id="blank2" class="blank-input" placeholder="answer 2" autocomplete="off" required>.
+    <div class="phone-container">
+        <!-- Mock Mobile Phone Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>📶 🔋 100%</span>
         </div>
 
-        <button type="submit" class="btn-submit" id="submitBtn">Check Answers</button>
-    </form>
+        <div class="screen-content">
+            <header>
+                <h1>မေးခွန်းပုံစံများ</h1>
+                <p>လေ့ကျင့်လိုသော မေးခွန်းခလုတ်ကို နှိပ်ပါ</p>
+            </header>
 
-    <div id="feedback" class="feedback"></div>
-</div>
+            <!-- အပေါ်အောက် အစီအစဉ်အတိုင်း အရောင်ခွဲထားသော Button များ -->
+            <nav class="buttons-nav">
+                <a href="true.html" class="nav-btn btn-true" id="btn-true">True or False</a>
+                <a href="fill.html" class="nav-btn btn-fill" id="btn-fill">Fill in the blank</a>
+                <a href="multiple.html" class="nav-btn btn-multiple" id="btn-multiple">Multiple Choice</a>
+            </nav>
 
-<script>
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
-        // Prevent the form from submitting and reloading the page
-        e.preventDefault();
+            <!-- Dynamic Content Preview via JavaScript -->
+            <div class="preview-card">
+                <div class="preview-icon" id="preview-icon">📱</div>
+                <div class="preview-title" id="preview-title">စမ်းသပ်ခန်း</div>
+                <div class="preview-desc" id="preview-desc">အပေါ်က Button တစ်ခုခုကို နှိပ်ပြီး ၎င်းတို့ သွားမယ့် လင့်ခ်လမ်းကြောင်း (href) ကို ကြည့်နိုင်ပါတယ်။</div>
+            </div>
+        </div>
+    </div>
 
-        // Define acceptable correct answers (lowercased for case-insensitive validation)
-        const answers = {
-            blank1: ['interactive', 'dynamic'],
-            blank2: ['structure', 'layout', 'skeleton']
-        };
+    <script>
+        // Button များ နှိပ်လိုက်သည့်အခါ Action ပြောင်းလဲစေရန် JavaScript ရေးသားထားခြင်း
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // လက်ရှိ စမ်းသပ်မှုလွယ်ကူစေရန် သီးသန့် href page သို့ တိုက်ရိုက်မသွားစေဘဲ preview ပြပေးရန် event တားဆီးထားနိုင်သည် (လိုအပ်က e.preventDefault() သုံးနိုင်)
+                // ဤနေရာတွင် မူရင်းအတိုင်း သွားစေလိုပါက e.preventDefault() မထည့်ပါနှင့်။
+                e.preventDefault(); 
+                
+                const href = this.getAttribute('href');
+                const name = this.innerText;
+                
+                document.getElementById('preview-title').innerText = name;
+                document.getElementById('preview-desc').innerText = `သွားမည့် လင့်ခ်ဖိုင်အမည်မှာ "${href}" ဖြစ်ပါသည်။`;
 
-        // Grab elements
-        const input1 = document.getElementById('blank1');
-        const input2 = document.getElementById('blank2');
-        const feedbackDiv = document.getElementById('feedback');
-        const submitBtn = document.getElementById('submitBtn');
-
-        // Extract value, trim spaces, and make lowercase
-        const userAns1 = input1.value.trim().toLowerCase();
-        const userAns2 = input2.value.trim().toLowerCase();
-
-        // Validate first blank
-        let isCorrect1 = answers.blank1.includes(userAns1);
-        if (isCorrect1) {
-            input1.className = "blank-input correct-input";
-        } else {
-            input1.className = "blank-input incorrect-input";
-        }
-
-        // Validate second blank
-        let isCorrect2 = answers.blank2.includes(userAns2);
-        if (isCorrect2) {
-            input2.className = "blank-input correct-input";
-        } else {
-            input2.className = "blank-input incorrect-input";
-        }
-
-        // Display consolidated feedback message
-        if (isCorrect1 && isCorrect2) {
-            feedbackDiv.className = "feedback correct";
-            feedbackDiv.textContent = "Excellent! Both answers are correct.";
-        } else {
-            feedbackDiv.className = "feedback incorrect";
-            
-            // Helpful text showing what parts need correcting
-            let errorText = "Some answers are incorrect. ";
-            if (!isCorrect1) errorText += "Check Blank 1. ";
-            if (!isCorrect2) errorText += "Check Blank 2. ";
-            feedbackDiv.textContent = errorText;
-        }
-
-        // Lock inputs and button after checking to prevent editing
-        input1.disabled = true;
-        input2.disabled = true;
-        submitBtn.disabled = true;
-    });
-</script>
+                // Icon ပြောင်းလဲခြင်း
+                if(href.includes('true')) document.getElementById('preview-icon').innerText = "❌✔️";
+                if(href.includes('fill')) document.getElementById('preview-icon').innerText = "✍️";
+                if(href.includes('multiple')) document.getElementById('preview-icon').innerText = "🔢";
+            });
+        });
+    </script>
 
 </body>
 </html>
