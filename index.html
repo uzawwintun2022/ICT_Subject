@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quiz Navigation Buttons</title>
+    <title>Quiz Navigation Links</title>
     <style>
         :root {
-            /* Button Colors */
-            --color-true-false: #ef4444;      /* Red */
-            --color-fill-blank: #f59e0b;      /* Amber/Orange */
-            --color-multiple: #10b981;        /* Emerald/Green */
+            /* Button များအတွက် သီးသန့်အရောင်များ */
+            --color-true-false: #ef4444;      /* အနီရောင် */
+            --color-fill-blank: #f59e0b;      /* အဝါရင့်ရောင် */
+            --color-multiple: #10b981;        /* အစိမ်းရောင် */
             
             --bg-base: #f1f5f9;
             --bg-card: #ffffff;
@@ -22,7 +22,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
@@ -35,7 +35,7 @@
             padding: 16px;
         }
 
-        /* Phone Viewport Container */
+        /* ဖုန်းမျက်နှာပြင် (Mobile Viewport) ပုံစံ ကန့်သတ်ချက် */
         .phone-container {
             width: 100%;
             max-width: 412px;
@@ -50,7 +50,7 @@
             position: relative;
         }
 
-        /* Top Status Bar */
+        /* ထိပ်ဆုံးက ဖုန်း Status Bar အလှဆင်ခြင်း */
         .status-bar {
             height: 24px;
             background: #1e293b;
@@ -79,7 +79,6 @@
         header h1 {
             font-size: 22px;
             font-weight: 700;
-            color: var(--text-main);
             margin-bottom: 6px;
         }
 
@@ -88,15 +87,15 @@
             color: var(--text-muted);
         }
 
-        /* Vertical Button Navigation Layout (အပေါ်အောက် တန်းစီစနစ်) */
+        /* Button များကို အပေါ်အောက် ထားရှိရန် Layout */
         .buttons-nav {
             display: flex;
-            flex-direction: column; /* အပေါ်အောက် ထားရန် */
-            gap: 14px;              /* ခလုတ်တစ်ခုစီကြား အကွာအဝေး */
+            flex-direction: column;
+            gap: 14px;
             margin-bottom: 28px;
         }
 
-        /* Base Button Style */
+        /* <a> tag ကို ခလုတ် (Button) ပုံစံ ပြောင်းလဲခြင်း */
         .nav-btn {
             display: block;
             width: 100%;
@@ -104,19 +103,19 @@
             font-size: 15px;
             font-weight: 600;
             color: white;
-            text-decoration: none;
+            text-decoration: none; /* အောက်ခံလိုင်း ဖျောက်ရန် */
             text-align: center;
             border-radius: var(--radius);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.1s ease, background-color 0.2s ease;
         }
 
+        /* ခလုတ်နှိပ်လိုက်သည့်အခါ တုံ့ပြန်မှုပြရန် */
         .nav-btn:active {
             transform: scale(0.97);
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        /* ခလုတ်များအား ကာလာ သီးသန့်စီ ခွဲပေးထားခြင်း */
+        /* ခလုတ်တစ်ခုချင်းစီ၏ သီးသန့် Background အရောင်များ */
         .btn-true {
             background-color: var(--color-true-false);
         }
@@ -138,8 +137,8 @@
             background-color: #059669;
         }
 
-        /* Preview Display Area */
-        .preview-card {
+        /* တိုးတက်မှု အခြေအနေပြ ကတ်ပြားပုံစံ */
+        .status-card {
             flex: 1;
             background: #f8fafc;
             border: 2px dashed #e2e8f0;
@@ -152,19 +151,13 @@
             text-align: center;
         }
 
-        .preview-icon {
+        .card-icon {
             font-size: 36px;
             margin-bottom: 10px;
         }
 
-        .preview-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .preview-desc {
-            font-size: 12px;
+        .card-text {
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.4;
         }
@@ -173,7 +166,6 @@
 <body>
 
     <div class="phone-container">
-        <!-- Mock Mobile Phone Status Bar -->
         <div class="status-bar">
             <span>9:41</span>
             <span>📶 🔋 100%</span>
@@ -181,45 +173,27 @@
 
         <div class="screen-content">
             <header>
-                <h1>မေးခွန်းပုံစံများ</h1>
-                <p>လေ့ကျင့်လိုသော မေးခွန်းခလုတ်ကို နှိပ်ပါ</p>
+                <h1>Quiz Menu</h1>
+                <p>ဖြေဆိုလိုသည့် မေးခွန်းခလုတ်ကို နှိပ်ပါ</p>
             </header>
 
-            <!-- အပေါ်အောက် အစီအစဉ်အတိုင်း အရောင်ခွဲထားသော Button များ -->
             <nav class="buttons-nav">
-                <a href="true.html" class="nav-btn btn-true" id="btn-true">True or False</a>
-                <a href="fill.html" class="nav-btn btn-fill" id="btn-fill">Fill in the blank</a>
-                <a href="multiple.html" class="nav-btn btn-multiple" id="btn-multiple">Multiple Choice</a>
+                <a href="true.html" class="nav-btn btn-true">True or False</a>
+                <a href="fill.html" class="nav-btn btn-fill">Fill in the blank</a>
+                <a href="multiple.html" class="nav-btn btn-multiple">Multiple Choice</a>
             </nav>
 
-            <!-- Dynamic Content Preview via JavaScript -->
-            <div class="preview-card">
-                <div class="preview-icon" id="preview-icon">📱</div>
-                <div class="preview-title" id="preview-title">စမ်းသပ်ခန်း</div>
-                <div class="preview-desc" id="preview-desc">အပေါ်က Button တစ်ခုခုကို နှိပ်ပြီး ၎င်းတို့ သွားမယ့် လင့်ခ်လမ်းကြောင်း (href) ကို ကြည့်နိုင်ပါတယ်။</div>
+            <div class="status-card">
+                <div class="card-icon">🚀</div>
+                <div class="card-text">ခလုတ်တစ်ခုခုကို နှိပ်လိုက်ပါက သတ်မှတ်ထားသော .html Page များဆီသို့ တိုက်ရိုက် ရောက်ရှိသွားမည် ဖြစ်ပါသည်။</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Button များ နှိပ်လိုက်သည့်အခါ Action ပြောင်းလဲစေရန် JavaScript ရေးသားထားခြင်း
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // လက်ရှိ စမ်းသပ်မှုလွယ်ကူစေရန် သီးသန့် href page သို့ တိုက်ရိုက်မသွားစေဘဲ preview ပြပေးရန် event တားဆီးထားနိုင်သည် (လိုအပ်က e.preventDefault() သုံးနိုင်)
-                // ဤနေရာတွင် မူရင်းအတိုင်း သွားစေလိုပါက e.preventDefault() မထည့်ပါနှင့်။
-                e.preventDefault(); 
-                
-                const href = this.getAttribute('href');
-                const name = this.innerText;
-                
-                document.getElementById('preview-title').innerText = name;
-                document.getElementById('preview-desc').innerText = `သွားမည့် လင့်ခ်ဖိုင်အမည်မှာ "${href}" ဖြစ်ပါသည်။`;
-
-                // Icon ပြောင်းလဲခြင်း
-                if(href.includes('true')) document.getElementById('preview-icon').innerText = "❌✔️";
-                if(href.includes('fill')) document.getElementById('preview-icon').innerText = "✍️";
-                if(href.includes('multiple')) document.getElementById('preview-icon').innerText = "🔢";
-            });
+        // စာမျက်နှာ အပြန်အလှန် အကျိုးသက်ရောက်မှု ရှိစေရန် ကြိုဆိုကြောင်း စာတန်းပြသသည့် JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Quiz Navigation Link system is active and ready.");
         });
     </script>
 
