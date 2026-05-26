@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science MCQ Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .question {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .underline-input {
+            border: none;
+            border-bottom: 2px solid #2c3e50;
+            background: transparent;
+            width: 150px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2980b9;
+            outline: none;
+            padding: 2px;
+        }
+
+        .options-grid {
+            display: block;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            transition: background-color 0.2s;
+        }
+
+        .option-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .option-item input {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .option-text {
+            font-size: 15px;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            display: none;
+        }
+
+        .correct-text {
+            color: #27ae60;
+        }
+
+        .wrong-text {
+            color: #c0392b;
+        }
+
+        .correct-card {
+            border-left: 5px solid #27ae60;
+            background-color: #f4fbf7;
+        }
+
+        .wrong-card {
+            border-left: 5px solid #c0392b;
+            background-color: #fdf5f5;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-check {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background-color: #219653;
+        }
+
+        .btn-reset {
+            background-color: #7f8c8d;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #6c7a7d;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 5px;
+            color: #2980b9;
+            display: none;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            color: #bdc3c7;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 8px 5px;
+            margin: 0 5px;
+            border-radius: 4px;
+            background-color: #34495e;
+            transition: all 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-btn:hover {
+            background-color: #415b76;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .header {
+                font-size: 20px;
+                padding: 15px;
+            }
+            .quiz-card {
+                padding: 15px;
+            }
+            .question {
+                font-size: 15px;
+            }
+            .option-text {
+                font-size: 14px;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            button {
+                width: 100%;
+                padding: 14px;
+            }
+            .bottom-nav {
+                padding: 10px 5px;
+            }
+            .nav-btn {
+                font-size: 12px;
+                padding: 8px 2px;
+                margin: 0 3px;
+            }
+            .underline-input {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Computer Science Quiz (MCQ)</div>
+
+    <div class="container">
+        <div id="score-board" class="score-display"></div>
+        <div id="quiz-container"></div>
+
+        <div class="controls">
+            <button class="btn-check" onclick="checkAnswers()">Check Answers</button>
+            <button class="btn-reset" onclick="resetQuiz()">Reset & Randomize</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-btn">Back</a>
+        <a href="fill.html" class="nav-btn">Fill in the blank</a>
+        <a href="true.html" class="nav-btn">True or False</a>
+    </nav>
+
+    <script>
+        const originalQuestions = [
+            { id: 1, text: "Right <input type='text' class='underline-input' readonly id='ans-1'> refers to providing information in the right format.", options: { a: "Information", b: "Time", c: "People", d: "Form" }, correct: "d" },
+            { id: 2, text: "A good password is at least <input type='text' class='underline-input' readonly id='ans-2'> characters.", options: { a: "seven", b: "eight", c: "nine", d: "ten" }, correct: "b" },
+            { id: 3, text: "<input type='text' class='underline-input' readonly id='ans-3'> is the act of gaining access to a computer or computer network to obtain or modify information without legal authorization.", options: { a: "Hacking", b: "Phishing", c: "Malicious code", d: "Password guessing" }, correct: "a" },
+            { id: 4, text: "How many types of internal threats?<br><input type='text' class='underline-input' readonly id='ans-4'>", options: { a: "two", b: "three", c: "four", d: "five" }, correct: "b" },
+            { id: 5, text: "Input device for characters and number is <input type='text' class='underline-input' readonly id='ans-5'>.", options: { a: "Mouse", b: "Keyboard", c: "Pointing stick", d: "Touchpad" }, correct: "b" },
+            { id: 6, text: "One of the output devices for display is <input type='text' class='underline-input' readonly id='ans-6'>.", options: { a: "Printer", b: "Scanner", c: "Barcode Reader", d: "LCD" }, correct: "d" },
+            { id: 7, text: "Which of the following is a hardware device?<br><input type='text' class='underline-input' readonly id='ans-7'>", options: { a: "Device driver", b: "Barcode reader", c: "Complier", d: "Disk defragment" }, correct: "b" },
+            { id: 8, text: "Which of the following is not a system software?<br><input type='text' class='underline-input' readonly id='ans-8'>", options: { a: "Device drivers", b: "Operating system", c: "Language processor", d: "Word procesor" }, correct: "d" },
+            { id: 9, text: "<input type='text' class='underline-input' readonly id='ans-9'> image format supports 48-bit color images and is suited for photographs.", options: { a: "JPEG", b: "GIF", c: "TIFF", d: "PNG" }, correct: "d" },
+            { id: 10, text: "<input type='text' class='underline-input' readonly id='ans-10'> have a data transfer speed of serval Mbps to several dozen of Mbps.", options: { a: "MPEG", b: "MPEG-1", c: "MPEG-2", d: "MPEG-4" }, correct: "c" },
+            { id: 11, text: "A video file format created by Apple is <input type='text' class='underline-input' readonly id='ans-11'>.", options: { a: "MPEG(.mpg)", b: "SWF(.swf)", c: "Quick Time (.mov)", d: "AVI (.avi)" }, correct: "c" },
+            { id: 12, text: "Which one of the following combination of R, G, B values are produced the white color.<br><input type='text' class='underline-input' readonly id='ans-12'>", options: { a: "0,0,0", b: "1,1,1", c: "5,30,155", d: "255, 255, 255" }, correct: "d" },
+            { id: 13, text: "<input type='text' class='underline-input' readonly id='ans-13'> file type is the data can be compressed to about 1/20 the size of a music CD.", options: { a: "MP3", b: "WAV", c: "WMA", d: "MIDI" }, correct: "c" },
+            { id: 14, text: "How many Features of Computer network?<br><input type='text' class='underline-input' readonly id='ans-14'>", options: { a: "5", b: "6", c: "7", d: "8" }, correct: "c" },
+            { id: 15, text: "How many types of cables are used in Networking?<br><input type='text' class='underline-input' readonly id='ans-15'>", options: { a: "3", b: "4", c: "5", d: "8" }, correct: "a" },
+            { id: 16, text: "Peer-To-Peer network is useful for small environments, usually up to <input type='text' class='underline-input' readonly id='ans-16'> computers.", options: { a: "7", b: "8", c: "9", d: "10" }, correct: "a" },
+            { id: 17, text: "<input type='text' class='underline-input' readonly id='ans-17'> Area Network is a network arranged within an individual person, typically within a range of 10 meters.", options: { a: "Local", b: "Personal", c: "Metropolitan", d: "Wide" }, correct: "b" },
+            { id: 18, text: "OSI (Open Systems Interconnection) model have <input type='text' class='underline-input' readonly id='ans-18'> Layers.", options: { a: "4", b: "5", c: "6", d: "7" }, correct: "d" },
+            { id: 19, text: "The m-Government is the strategic delivery of public <input type='text' class='underline-input' readonly id='ans-19'>, information and interactions through wireless and mobile communication technologies.", options: { a: "service", b: "services", c: "servant", d: "servants" }, correct: "b" },
+            { id: 20, text: "The m-Government enables governments to provide anytime-anywhere access to <input type='text' class='underline-input' readonly id='ans-20'>, business and public officials via devices.", options: { a: "person", b: "people", c: "citizen", d: "citizens" }, correct: "d" },
+            { id: 21, text: "The m-Government helps to make public information and government services available anytime, anywhere to <input type='text' class='underline-input' readonly id='ans-21'> and business.", options: { a: "citizen", b: "citizens", c: "person", d: "people" }, correct: "b" },
+            { id: 22, text: "The Government globally are now embracing Internet of Things (IoT) to create smart cities, streamline infrastructure management, and ensure responsive public <input type='text' class='underline-input' readonly id='ans-22'>.", options: { a: "servant", b: "servants", c: "service", d: "services" }, correct: "d" },
+            { id: 23, text: "The integration of Internet of Things (IoT) tools enables real-time monitoring and decision- <input type='text' class='underline-input' readonly id='ans-23'> on everything form urban development to disaster response.", options: { a: "making", b: "working", c: "performing", d: "doing" }, correct: "a" },
+            { id: 24, text: "Artificial Intelligence (AI) is a branch of computer science dedicated to creating systems that perform <input type='text' class='underline-input' readonly id='ans-24'> typically requiring human intelligence.", options: { a: "works", b: "tasks", c: "duties", d: "services" }, correct: "b" },
+            { id: 25, text: "In Artificial Intelligence (AI), these <input type='text' class='underline-input' readonly id='ans-25'> include learning, reasoning, problem solving perception, natural language processing, and beyond.", options: { a: "services", b: "works", c: "duties", d: "tasks" }, correct: "d" },
+            { id: 26, text: "Artificial Intelligence (AI) <input type='text' class='underline-input' readonly id='ans-26'> range from simple rule-based programs to advanced neural networks that can analyze vast datasets and even generate creative outputs.", options: { a: "systems", b: "units", c: "functions", d: "works" }, correct: "a" },
+            { id: 27, text: "Generative Artificial Intelligence (AI) <input type='text' class='underline-input' readonly id='ans-27'> now allowed the creation of art, text, and even ___, reshaping creative and media production.", options: { a: "voice", b: "sound", c: "music", d: "noise" }, correct: "c" },
+            { id: 28, text: "In the Artificial Intelligence (AI), <input type='text' class='underline-input' readonly id='ans-28'> and societal implications with rapid technological progress come important ethical and societal considerations.", options: { a: "ethical", b: "apply", c: "rule", d: "discipline" }, correct: "a" }
+        ];
+
+        let currentQuestions = [];
+
+        function renderQuiz(questionsList) {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            questionsList.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `card-${q.id}`;
+
+                // Set dynamic question text replacing static text with input
+                let questionHTML = `<div class="question">${index + 1}. ${q.text}</div>`;
+                
+                let optionsHTML = '<div class="options-grid">';
+                for (let key in q.options) {
+                    optionsHTML += `
+                        <label class="option-item" onclick="selectOption(${q.id}, '${key}', '${q.options[key]}')">
+                            <input type="radio" name="q-${q.id}" value="${key}" id="opt-${q.id}-${key}">
+                            <span class="option-text">(${key}) ${q.options[key]}</span>
+                        </label>
+                    `;
+                }
+                optionsHTML += '</div>';
+
+                const feedbackHTML = `<div class="feedback" id="feedback-${q.id}"></div>`;
+
+                card.innerHTML = questionHTML + optionsHTML + feedbackHTML;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('score-board').style.display = 'none';
+        }
+
+        function selectOption(qId, key, value) {
+            const inputField = document.getElementById(`ans-${qId}`);
+            if (inputField) {
+                inputField.value = value;
+            }
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+
+            currentQuestions.forEach(q => {
+                const card = document.getElementById(`card-${q.id}`);
+                const feedback = document.getElementById(`feedback-${q.id}`);
+                const selectedRadio = document.querySelector(`input[name="q-${q.id}"]:checked`);
+                
+                feedback.style.display = 'block';
+
+                if (selectedRadio && selectedRadio.value === q.correct) {
+                    correctCount++;
+                    card.className = 'quiz-card correct-card';
+                    feedback.className = 'feedback correct-text';
+                    feedback.innerHTML = `✓ Correct! Answer is (${q.correct}) ${q.options[q.correct]}`;
+                } else {
+                    card.className = 'quiz-card wrong-card';
+                    feedback.className = 'feedback wrong-text';
+                    const selectedText = selectedRadio ? `(${selectedRadio.value}) ${q.options[selectedRadio.value]}` : 'None';
+                    feedback.innerHTML = `✗ Incorrect. Your choice: ${selectedText} | Correct Answer: (${q.correct}) ${q.options[q.correct]}`;
+                }
+            });
+
+            const scoreBoard = document.getElementById('score-board');
+            scoreBoard.style.display = 'block';
+            scoreBoard.innerHTML = `You scored ${correctCount} out of ${currentQuestions.length}!`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function resetQuiz() {
+            // Clone original list and shuffle
+            currentQuestions = shuffle([...originalQuestions]);
+            renderQuiz(currentQuestions);
+        }
+
+        // Initial Load
+        currentQuestions = [...originalQuestions];
+        renderQuiz(currentQuestions);
+    </script>
+</body>
+</html>
