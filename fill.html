@@ -165,7 +165,6 @@
             border-radius: 6px;
         }
 
-        /* Bottom Navigation Menu Styles */
         .bottom-nav {
             max-width: 800px;
             margin: 0 auto;
@@ -202,35 +201,15 @@
             background: #c0392b;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 600px) {
-            body {
-                padding: 10px 5px;
-            }
-            .container {
-                padding: 20px 15px;
-            }
-            h1 {
-                font-size: 20px;
-            }
-            .quiz-item {
-                font-size: 15px;
-            }
-            .blank-input {
-                width: 110px;
-                font-size: 15px;
-            }
-            button {
-                padding: 10px 15px;
-                font-size: 14px;
-            }
-            .bottom-nav {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .nav-link {
-                width: 100%;
-            }
+            body { padding: 10px 5px; }
+            .container { padding: 20px 15px; }
+            h1 { font-size: 20px; }
+            .quiz-item { font-size: 15px; }
+            .blank-input { width: 110px; font-size: 15px; }
+            button { padding: 10px 15px; font-size: 14px; }
+            .bottom-nav { flex-direction: column; gap: 8px; }
+            .nav-link { width: 100%; }
         }
     </style>
 </head>
@@ -250,7 +229,6 @@
     </div>
 </div>
 
-<!-- Bottom Navigation Links Area -->
 <div class="bottom-nav">
     <a href="index.html" class="nav-link back-btn">Back</a>
     <a href="true.html" class="nav-link">True / False</a>
@@ -258,42 +236,39 @@
 </div>
 
 <script>
-    // Original list of questions
     const originalQuizData = [
-        { num: 1, left: "Information assets are a valuable resource that needs ", right: ".", answer: "protection" },
-        { num: 2, left: "", right: " threats are attacks that are conducted by employees or contractors within organizations.", answer: "Internet" },
-        { num: 3, left: "", right: " code refers to programs that cause damage to a system when executed.", answer: "Malicious" },
-        { num: 4, left: "There are ", right: " types of cyber threats.", answer: "two" },
-        { num: 5, left: "A ", right: " is computer or system that server provides resources, data services, or program to other computer, known as clients, over a network.", answer: "server" },
-        { num: 6, left: "Application software includes two types General program: ", right: " Purpose Software and Specific Purpose Software.", answer: "General" },
-        { num: 7, left: "\"RAM\" is a ", right: " type of memory in which stored contents is lost when the power is turned off.", answer: "volatile" },
-        { num: 8, left: "Operating System acts as an intermediary between the ", right: " and the hardware.", answer: "user" },
-        { num: 9, left: "Multimedia file types include static images, ", right: " and audio.", answer: "video" },
-        { num: 10, left: "", right: " is an international standard data format for color video.", answer: "MPEG" },
-        { num: 11, left: "", right: " image format supports 24-bit color image and is suited for photographic.", answer: "JPEG" },
-        { num: 12, left: "", right: " file type is the data can be compressed to about 1/10 the size of a music CD.", answer: "MP3" },
-        { num: 13, left: "Small, Stand-alone Screen provided within the operational screen is called ", right: ".", answer: "window" },
-        { num: 14, left: "A ", right: " consists of two or more computers (or) devices.", answer: "network" },
-        { num: 15, left: "", right: " is used in communication between the banks in a city.", answer: "MAN" },
-        { num: 16, left: "Hub distributes this request to all the interconnected ", right: ".", answer: "computers" },
-        { num: 17, left: "A ", right: " is a set of rules for data communication between computers over a network.", answer: "protocol" },
-        { num: 18, left: "Peer-To-Peer network has no ", right: " server.", answer: "dedicated" },
-        { num: 19, left: "Today, mobility is increasingly being accepted as a part of daily", right: ".", answer: "life" },
-        { num: 20, left: "Today, the governments have to ", right: " their activities according to this demand.", answer: "transform" },
-        { num: 21, left: "The Internet of Things (IoT) fundamentally redefines how devices and systems interact by connecting sensors, actuators, and ", right: " processing units over networks.", answer: "data" },
-        { num: 22, left: "The Internet of Things (IoT) is not merely a technology upgrade-it represents a transformative shift toward a ", right: "-driven, interconnected public sector.", answer: "data" },
-        { num: 23, left: "In the Internet of Things (IoT), sensors and actuators are the eyes, ears and muscles of an IoT system-collecting real-world ", right: " and performing physical actions.", answer: "data" },
-        { num: 24, left: "At their core, these tools harness artificial intelligence to analyzed personal ", right: " gathered form activities like journaling, daily routines, or even social interactions.", answer: "data" },
-        { num: 25, left: "This integration helps users better understand their strengths, weaknesses, and opportunities for ", right: ".", answer: "growth" },
-        { num: 26, left: "In Personalized Coaching and ", right: ", modern platforms use Artificial Intelligence to assist with reflective journaling.", answer: "Journaling" },
-        { num: 27, left: "In Personalized Coaching and Journaling, analyzing text entries, detecting recurring emotional states, and even suggesting topics or techniques to enhance self-awareness is called the reflective ", right: ".", answer: "journaling" },
-        { num: 28, left: "We use Artificial Intelligence (AI) to analyze personal data such as ", right: " records, behavioral patterns, and emotional makers to offer individualized insights.", answer: "journaling" }
+        { left: "Information assets are a valuable resource that needs ", right: ".", answer: "protection" },
+        { left: "", right: " threats are attacks that are conducted by employees or contractors within organizations.", answer: "Internal" },
+        { left: "", right: " code refers to programs that cause damage to a system when executed.", answer: "Malicious" },
+        { left: "There are ", right: " types of cyber threats.", answer: "two" },
+        { left: "A ", right: " is computer or system that server provides resources, data services, or program to other computer, known as clients, over a network.", answer: "server" },
+        { left: "Application software includes two types General program: ", right: " Purpose Software and Specific Purpose Software.", answer: "General" },
+        { left: "\"RAM\" is a ", right: " type of memory in which stored contents is lost when the power is turned off.", answer: "volatile" },
+        { left: "Operating System acts as an intermediary between the ", right: " and the hardware.", answer: "user" },
+        { left: "Multimedia file types include static images, ", right: " and audio.", answer: "video" },
+        { left: "", right: " is an international standard data format for color video.", answer: "MPEG" },
+        { left: "", right: " image format supports 24-bit color image and is suited for photographic.", answer: "JPEG" },
+        { left: "", right: " file type is the data can be compressed to about 1/10 the size of a music CD.", answer: "MP3" },
+        { left: "Small, Stand-alone Screen provided within the operational screen is called ", right: ".", answer: "window" },
+        { left: "A ", right: " consists of two or more computers (or) devices.", answer: "network" },
+        { left: "", right: " is used in communication between the banks in a city.", answer: "MAN" },
+        { left: "Hub distributes this request to all the interconnected ", right: ".", answer: "computers" },
+        { left: "A ", right: " is a set of rules for data communication between computers over a network.", answer: "protocol" },
+        { left: "Peer-To-Peer network has no ", right: " server.", answer: "dedicated" },
+        { left: "Today, mobility is increasingly being accepted as a part of daily ", right: ".", answer: "life" },
+        { left: "Today, the governments have to ", right: " their activities according to this demand.", answer: "transform" },
+        { left: "The Internet of Things (IoT) fundamentally redefines how devices and systems interact by connecting sensors, actuators, and ", right: " processing units over networks.", answer: "data" },
+        { left: "The Internet of Things (IoT) is not merely a technology upgrade-it represents a transformative shift toward a ", right: "-driven, interconnected public sector.", answer: "data" },
+        { left: "In the Internet of Things (IoT), sensors and actuators are the eyes, ears and muscles of an IoT system-collecting real-world ", right: " and performing physical actions.", answer: "data" },
+        { left: "At their core, these tools harness artificial intelligence to analyzed personal ", right: " gathered form activities like journaling, daily routines, or even social interactions.", answer: "data" },
+        { left: "This integration helps users better understand their strengths, weaknesses, and opportunities for ", right: ".", answer: "growth" },
+        { left: "In Personalized Coaching and ", right: ", modern platforms use Artificial Intelligence to assist with reflective journaling.", answer: "Journaling" },
+        { left: "In Personalized Coaching and Journaling, analyzing text entries, detecting recurring emotional states, and even suggesting topics or techniques to enhance self-awareness is called the reflective ", right: ".", answer: "journaling" },
+        { left: "We use Artificial Intelligence (AI) to analyze personal data such as ", right: " records, behavioral patterns, and emotional makers to offer individualized insights.", answer: "journaling" }
     ];
 
-    // Working array that will be shuffled
     let currentQuizData = [...originalQuizData];
 
-    // Shuffle function (Fisher-Yates algorithm)
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -309,7 +284,6 @@
             const item = document.createElement('div');
             item.className = 'quiz-item';
             
-            // Build text with inline input box (displays the original original question number q.num)
             item.innerHTML = `
                 <span class="q-num">${index + 1}.</span>
                 ${q.left}
@@ -349,17 +323,11 @@
     }
 
     function resetAndShuffleQuiz() {
-        // Clear inputs and score display
         document.getElementById('score-container').style.display = 'none';
-        
-        // Randomize the quiz items sequence
         shuffleArray(currentQuizData);
-        
-        // Re-render the randomized content
         loadQuiz();
     }
 
-    // Initialize quiz on load
     window.onload = loadQuiz;
 </script>
 
