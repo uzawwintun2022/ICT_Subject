@@ -216,8 +216,8 @@
 <body>
 
 <div class="container">
-    <h1>Fill in the Blanks Quiz</h1>
-    <p class="subtitle">Test your knowledge. Fill in the underlined inputs and click "Check Answers".</p>
+    <h1>Fill in the Blanks Quiz (Case Sensitive)</h1>
+    <p class="subtitle">Test your knowledge. Note: Capitalization matters (Case Sensitive)!</p>
 
     <div class="score-display" id="score-container"></div>
 
@@ -236,6 +236,7 @@
 </div>
 
 <script>
+    // Exact answers with case sensitivity maintained
     const originalQuizData = [
         { left: "Information assets are a valuable resource that needs ", right: ".", answer: "protection" },
         { left: "", right: " threats are attacks that are conducted by employees or contractors within organizations.", answer: "Internal" },
@@ -301,8 +302,10 @@
         currentQuizData.forEach((q, index) => {
             const inputEl = document.getElementById(`q-${index}`);
             const feedbackEl = document.getElementById(`feedback-${index}`);
-            const userAns = inputEl.value.trim().toLowerCase();
-            const correctAns = q.answer.toLowerCase();
+            
+            // Strictly case sensitive check (No toLowerCase conversion)
+            const userAns = inputEl.value.trim();
+            const correctAns = q.answer;
             
             if (userAns === correctAns) {
                 inputEl.className = "blank-input correct";
